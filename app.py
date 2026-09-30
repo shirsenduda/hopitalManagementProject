@@ -12,10 +12,15 @@ from flask import (Flask, flash, g, redirect, render_template, request,
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATABASE = os.path.join(BASE_DIR, "hospital.db")
+
+# On Vercel the filesystem is read-only except /tmp, so the DB lives there.
+# NOTE: data in /tmp is temporary and is lost when Vercel restarts the app.
+IS_VERCEL = bool(os.environ.get("VERCEL"))
+DATABASE = "/tmp/hospital.db" if IS_VERCEL else os.path.join(BASE_DIR, "hospital.db")
 
 app = Flask(__name__)
-app.secret_key = "change-this-secret-key-before-deployment"
+# Set SECRET_KEY as an environment variable on Vercel.
+app.secret_key = os.environ.get("SECRET_KEY", "change-this-secret-key-before-deployment")
 
 
 # --------------------------------------------------------------------------
@@ -563,6 +568,11 @@ def bill_pay(bill_id):
                 (method, bill_id))
         flash("Payment recorded.", "success")
     return redirect(url_for("bill_view", bill_id=bill_id))
+
+
+# On Vercel, `if __name__ == "__main__"` never runs, so create the DB at import time.
+if IS_VERCEL and not os.path.exists(DATABASE):
+    init_db()
 
 
 if __name__ == "__main__":
