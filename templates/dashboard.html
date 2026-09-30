@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Welcome, {{ session.name }}</h1>
+<div class="stats">
+  <div class="stat"><span>{{ stats.patients }}</span>Total Patients</div>
+  <div class="stat"><span>{{ stats.doctors }}</span>Doctors</div>
+  <div class="stat"><span>{{ stats.today_appts }}</span>Appointments Today</div>
+  {% if session.role != 'doctor' %}
+  <div class="stat"><span>{{ stats.unpaid }}</span>Unpaid Bills</div>
+  <div class="stat"><span>{{ stats.revenue|money }}</span>Revenue Collected</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="row-between"><h2>Today's Appointments ({{ today }})</h2>
+    {% if session.role != 'doctor' %}<a class="btn primary" href="{{ url_for('appointment_add') }}">+ Book Appointment</a>{% endif %}
+  </div>
+  {% if todays %}
+  <table>
+    <tr><th>Time</th><th>Patient</th><th>Doctor</th><th>Reason</th><th>Action</th></tr>
+    {% for a in todays %}
+    <tr>
+      <td>{{ a.appt_time }}</td>
+      <td><a href="{{ url_for('patient_view', patient_id=a.patient_id) }}">{{ a.patient_name }}</a></td>
+      <td>{{ a.doctor_name }}</td><td>{{ a.reason }}</td>
+      <td>
+        <form method="post" action="{{ url_for('appointment_status', appt_id=a.id) }}" class="inline">
+          <button name="status" value="Completed" class="btn small success">Complete</button>
+          <button name="status" value="Cancelled" class="btn small danger">Cancel</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">No scheduled appointments for today.</p>{% endif %}
+</div>
+{% endblock %}

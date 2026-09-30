@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Billing{% endblock %}
+{% block content %}
+<div class="row-between">
+  <h1>Billing</h1>
+  <a class="btn primary" href="{{ url_for('bill_add') }}">+ New Bill</a>
+</div>
+<form method="get" class="search">
+  <select name="status">
+    <option value="">All bills</option>
+    {% for s in ['Unpaid', 'Paid'] %}<option {{ 'selected' if status == s }}>{{ s }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Filter</button>
+</form>
+<div class="card">
+{% if bills %}
+<table>
+  <tr><th>Bill #</th><th>Date</th><th>Patient</th><th>Total</th><th>Status</th><th></th></tr>
+  {% for b in bills %}
+  <tr><td>{{ b.id }}</td><td>{{ b.bill_date }}</td><td>{{ b.patient_name }}</td><td>{{ b.total|money }}</td>
+      <td><span class="badge {{ b.status|lower }}">{{ b.status }}</span></td>
+      <td><a class="btn small" href="{{ url_for('bill_view', bill_id=b.id) }}">Open</a></td></tr>
+  {% endfor %}
+</table>
+{% else %}<p class="muted">No bills found.</p>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Book Appointment{% endblock %}
+{% block content %}
+<h1>Book Appointment</h1>
+<div class="card form-card">
+<form method="post">
+  <label>Patient</label>
+  <select name="patient_id" required>
+    <option value="">Select patient</option>
+    {% for p in patients %}<option value="{{ p.id }}" {{ 'selected' if f.patient_id|string == p.id|string }}>{{ p.name }} ({{ p.phone }})</option>{% endfor %}
+  </select>
+  <label>Doctor</label>
+  <select name="doctor_id" required>
+    <option value="">Select doctor</option>
+    {% for d in doctors %}<option value="{{ d.id }}" {{ 'selected' if f.doctor_id|string == d.id|string }}>{{ d.name }} - {{ d.department }}</option>{% endfor %}
+  </select>
+  <div class="grid2">
+    <div><label>Date</label><input type="date" name="appt_date" min="{{ today }}" value="{{ f.appt_date or today }}" required></div>
+    <div><label>Time</label><input type="time" name="appt_time" value="{{ f.appt_time or '' }}" required></div>
+  </div>
+  <label>Reason for visit</label>
+  <textarea name="reason" rows="2">{{ f.reason or '' }}</textarea>
+  <button class="btn primary" type="submit">Book Appointment</button>
+  <a class="btn" href="{{ url_for('appointments') }}">Cancel</a>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }} Patient{% endblock %}
+{% block content %}
+<h1>{{ mode }} Patient</h1>
+<div class="card form-card">
+<form method="post">
+  <label>Full Name</label>
+  <input type="text" name="name" value="{{ patient.name or '' }}" required>
+  <div class="grid2">
+    <div><label>Age</label><input type="number" name="age" min="0" max="120" value="{{ patient.age or '' }}" required></div>
+    <div><label>Gender</label>
+      <select name="gender" required>
+        <option value="">Select</option>
+        {% for g in ['Male', 'Female', 'Other'] %}<option {{ 'selected' if patient.gender == g }}>{{ g }}</option>{% endfor %}
+      </select></div>
+  </div>
+  <div class="grid2">
+    <div><label>Phone (10 digits)</label><input type="text" name="phone" maxlength="10" value="{{ patient.phone or '' }}" required></div>
+    <div><label>Blood Group</label>
+      <select name="blood_group">
+        <option value="">Unknown</option>
+        {% for b in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}<option {{ 'selected' if patient.blood_group == b }}>{{ b }}</option>{% endfor %}
+      </select></div>
+  </div>
+  <label>Address</label>
+  <textarea name="address" rows="3">{{ patient.address or '' }}</textarea>
+  <button class="btn primary" type="submit">Save Patient</button>
+  <a class="btn" href="{{ url_for('patients') }}">Cancel</a>
+</form>
+</div>
+{% endblock %}

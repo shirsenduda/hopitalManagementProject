@@ -1,0 +1,70 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f2f6fa; color: #1e2b37; }
+a { color: #0b6fb8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1 { font-size: 26px; margin: 10px 0 16px; }
+h2 { font-size: 18px; margin: 0 0 12px; }
+hr { border: 0; border-top: 1px solid #e1e8ef; margin: 16px 0; }
+
+.navbar { display: flex; align-items: center; gap: 24px; background: #0b6fb8; color: #fff; padding: 12px 24px; flex-wrap: wrap; }
+.navbar a { color: #fff; }
+.brand { font-weight: bold; font-size: 18px; }
+.navbar nav { display: flex; gap: 18px; flex: 1; flex-wrap: wrap; }
+.navbar nav a { opacity: .9; }
+.user { font-size: 14px; }
+.logout { margin-left: 10px; background: rgba(255,255,255,.18); padding: 4px 10px; border-radius: 4px; }
+
+.container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+.card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.row-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.muted { color: #6b7a88; font-size: 14px; font-weight: normal; }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.stat { background: #fff; border-radius: 8px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,.08); color: #6b7a88; font-size: 14px; }
+.stat span { display: block; font-size: 28px; font-weight: bold; color: #0b6fb8; margin-bottom: 4px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #e8eef4; }
+th { background: #f6f9fc; color: #44566a; }
+.right { text-align: right; }
+.total td { font-weight: bold; font-size: 16px; border-top: 2px solid #1e2b37; }
+
+.btn { display: inline-block; border: 1px solid #c5d2de; background: #fff; color: #1e2b37; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.btn:hover { background: #eef3f8; text-decoration: none; }
+.btn.primary { background: #0b6fb8; border-color: #0b6fb8; color: #fff; }
+.btn.primary:hover { background: #095b96; }
+.btn.success { background: #1f9d55; border-color: #1f9d55; color: #fff; }
+.btn.danger { background: #d64545; border-color: #d64545; color: #fff; }
+.btn.small { padding: 4px 10px; font-size: 12px; }
+.btn.full { width: 100%; margin-top: 14px; }
+form.inline { display: inline; }
+
+label { display: block; margin: 12px 0 4px; font-size: 14px; font-weight: bold; }
+input, select, textarea { width: 100%; padding: 9px 10px; border: 1px solid #c5d2de; border-radius: 6px; font-size: 14px; font-family: inherit; }
+.form-card { max-width: 640px; }
+.form-card .btn { margin-top: 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 10px; }
+.search { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.search input, .search select { width: auto; flex: 1; min-width: 160px; max-width: 320px; }
+
+.alert { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+.alert.success { background: #e3f6ea; color: #17643a; }
+.alert.error { background: #fde7e7; color: #a12a2a; }
+
+.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; background: #e8eef4; }
+.badge.role { background: rgba(255,255,255,.25); text-transform: capitalize; }
+.badge.scheduled, .badge.unpaid { background: #fff1d6; color: #8a5a00; }
+.badge.completed, .badge.paid { background: #e3f6ea; color: #17643a; }
+.badge.cancelled { background: #fde7e7; color: #a12a2a; }
+.badge.big { font-size: 14px; padding: 6px 16px; }
+
+.record { background: #f6f9fc; border-left: 4px solid #0b6fb8; padding: 12px; margin-bottom: 10px; border-radius: 4px; font-size: 14px; line-height: 1.6; }
+
+.login-box { max-width: 380px; margin: 60px auto; text-align: center; }
+.login-box form { text-align: left; }
+.demo { margin-top: 20px; padding: 12px; background: #f6f9fc; border-radius: 6px; font-size: 13px; color: #44566a; }
+.invoice { max-width: 680px; margin: 0 auto; }
+
+@media (max-width: 700px) { .grid2, .grid4 { grid-template-columns: 1fr; } table { font-size: 12px; } }
+@media print { .navbar, .no-print { display: none !important; } body { background: #fff; } .card { box-shadow: none; } }

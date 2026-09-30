@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Departments{% endblock %}
+{% block content %}
+<h1>Departments</h1>
+<div class="card">
+  <form method="post" class="search">
+    <input type="text" name="name" placeholder="New department name" required>
+    <button class="btn primary" type="submit">Add Department</button>
+  </form>
+  <table>
+    <tr><th>#</th><th>Department</th><th>Doctors</th><th></th></tr>
+    {% for d in departments %}
+    <tr><td>{{ d.id }}</td><td>{{ d.name }}</td><td>{{ d.doctor_count }}</td>
+      <td><form method="post" action="{{ url_for('department_delete', dept_id=d.id) }}" class="inline"
+                onsubmit="return confirm('Delete this department?');"><button class="btn small danger">Delete</button></form></td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

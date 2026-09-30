@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Appointments{% endblock %}
+{% block content %}
+<div class="row-between">
+  <h1>Appointments</h1>
+  {% if session.role in ('admin', 'receptionist') %}
+  <a class="btn primary" href="{{ url_for('appointment_add') }}">+ Book Appointment</a>{% endif %}
+</div>
+<form method="get" class="search">
+  <input type="date" name="date" value="{{ day }}">
+  <select name="status">
+    <option value="">All statuses</option>
+    {% for s in ['Scheduled', 'Completed', 'Cancelled'] %}<option {{ 'selected' if status == s }}>{{ s }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Filter</button>
+  <a class="btn" href="{{ url_for('appointments') }}">Reset</a>
+</form>
+<div class="card">
+{% if appointments %}
+<table>
+  <tr><th>Date</th><th>Time</th><th>Patient</th><th>Doctor</th><th>Reason</th><th>Status</th><th>Action</th></tr>
+  {% for a in appointments %}
+  <tr>
+    <td>{{ a.appt_date }}</td><td>{{ a.appt_time }}</td>
+    <td><a href="{{ url_for('patient_view', patient_id=a.patient_id) }}">{{ a.patient_name }}</a></td>
+    <td>{{ a.doctor_name }}</td><td>{{ a.reason }}</td>
+    <td><span class="badge {{ a.status|lower }}">{{ a.status }}</span></td>
+    <td>
+      {% if a.status == 'Scheduled' %}
+      <form method="post" action="{{ url_for('appointment_status', appt_id=a.id) }}" class="inline">
+        <button name="status" value="Completed" class="btn small success">Complete</button>
+        <button name="status" value="Cancelled" class="btn small danger">Cancel</button>
+      </form>
+      {% elif a.status == 'Completed' and session.role in ('admin', 'receptionist') %}
+      <a class="btn small" href="{{ url_for('bill_add', appointment_id=a.id) }}">Generate Bill</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}<p class="muted">No appointments found.</p>{% endif %}
+</div>
+{% endblock %}

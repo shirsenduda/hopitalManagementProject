@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ patient.name }}{% endblock %}
+{% block content %}
+<div class="row-between">
+  <h1>{{ patient.name }} <span class="muted">({{ patient.id|pid }})</span></h1>
+  <div>
+    {% if session.role in ('admin', 'receptionist') %}
+      <a class="btn primary" href="{{ url_for('appointment_add', patient_id=patient.id) }}">Book Appointment</a>
+      <a class="btn" href="{{ url_for('patient_edit', patient_id=patient.id) }}">Edit</a>
+    {% endif %}
+    {% if session.role == 'admin' %}
+      <form method="post" action="{{ url_for('patient_delete', patient_id=patient.id) }}" class="inline"
+            onsubmit="return confirm('Delete this patient and all related records?');">
+        <button class="btn danger">Delete</button></form>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="grid4">
+    <div><span class="muted">Age</span><br>{{ patient.age }}</div>
+    <div><span class="muted">Gender</span><br>{{ patient.gender }}</div>
+    <div><span class="muted">Phone</span><br>{{ patient.phone }}</div>
+    <div><span class="muted">Blood Group</span><br>{{ patient.blood_group or '-' }}</div>
+  </div>
+  <p><span class="muted">Address</span><br>{{ patient.address or '-' }}</p>
+  <p class="muted">Registered on {{ patient.created_at }}</p>
+</div>
+
+<div class="card">
+  <h2>Medical Records</h2>
+  {% if session.role == 'doctor' %}
+  <form method="post" action="{{ url_for('record_add', patient_id=patient.id) }}" class="record-form">
+    <label>Diagnosis</label><input type="text" name="diagnosis" required>
+    <label>Prescription</label><textarea name="prescription" rows="2"></textarea>
+    <label>Notes</label><textarea name="notes" rows="2"></textarea>
+    <button class="btn primary" type="submit">Add Record</button>
+  </form>
+  <hr>
+  {% endif %}
+  {% for r in records %}
+  <div class="record">
+    <strong>{{ r.visit_date }}</strong> &mdash; {{ r.doctor_name }}<br>
+    <b>Diagnosis:</b> {{ r.diagnosis }}<br>
+    {% if r.prescription %}<b>Prescription:</b> {{ r.prescription }}<br>{% endif %}
+    {% if r.notes %}<b>Notes:</b> {{ r.notes }}{% endif %}
+  </div>
+  {% else %}<p class="muted">No medical records yet.</p>{% endfor %}
+</div>
+
+<div class="card">
+  <h2>Appointment History</h2>
+  {% if appts %}
+  <table>
+    <tr><th>Date</th><th>Time</th><th>Doctor</th><th>Reason</th><th>Status</th></tr>
+    {% for a in appts %}
+    <tr><td>{{ a.appt_date }}</td><td>{{ a.appt_time }}</td><td>{{ a.doctor_name }}</td>
+        <td>{{ a.reason }}</td><td><span class="badge {{ a.status|lower }}">{{ a.status }}</span></td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">No appointments yet.</p>{% endif %}
+</div>
+
+{% if session.role in ('admin', 'receptionist') %}
+<div class="card">
+  <h2>Bills</h2>
+  {% if bills %}
+  <table>
+    <tr><th>Bill #</th><th>Date</th><th>Total</th><th>Status</th><th></th></tr>
+    {% for b in bills %}
+    <tr><td>{{ b.id }}</td><td>{{ b.bill_date }}</td><td>{{ b.total|money }}</td>
+        <td><span class="badge {{ b.status|lower }}">{{ b.status }}</span></td>
+        <td><a class="btn small" href="{{ url_for('bill_view', bill_id=b.id) }}">Open</a></td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">No bills yet.</p>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Bill #{{ bill.id }}{% endblock %}
+{% block content %}
+<div class="invoice card">
+  <div class="row-between">
+    <div><h1>+ CityCare Hospital</h1><p class="muted">Invoice #{{ bill.id }} &middot; {{ bill.bill_date }}</p></div>
+    <span class="badge big {{ bill.status|lower }}">{{ bill.status }}</span>
+  </div>
+  <p><b>{{ bill.patient_name }}</b> ({{ bill.patient_id|pid }})<br>
+     {{ bill.age }} yrs, {{ bill.gender }} &middot; {{ bill.phone }}</p>
+  <table>
+    <tr><th>Description</th><th class="right">Amount</th></tr>
+    <tr><td>Consultation Fee</td><td class="right">{{ bill.consultation_fee|money }}</td></tr>
+    <tr><td>Medicine Charges</td><td class="right">{{ bill.medicine_charges|money }}</td></tr>
+    <tr><td>Other Charges</td><td class="right">{{ bill.other_charges|money }}</td></tr>
+    <tr class="total"><td>Total</td><td class="right">{{ bill.total|money }}</td></tr>
+  </table>
+  {% if bill.status == 'Paid' %}
+    <p>Paid via <b>{{ bill.payment_method }}</b></p>
+  {% else %}
+    <form method="post" action="{{ url_for('bill_pay', bill_id=bill.id) }}" class="search no-print">
+      <select name="payment_method" required>
+        <option value="">Payment method</option><option>Cash</option><option>Card</option><option>UPI</option>
+      </select>
+      <button class="btn success" type="submit">Mark as Paid</button>
+    </form>
+  {% endif %}
+  <div class="no-print">
+    <button class="btn" onclick="window.print()">Print Invoice</button>
+    <a class="btn" href="{{ url_for('billing') }}">Back to Billing</a>
+  </div>
+</div>
+{% endblock %}

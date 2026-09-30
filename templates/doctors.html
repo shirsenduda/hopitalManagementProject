@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Doctors{% endblock %}
+{% block content %}
+<div class="row-between">
+  <h1>Doctors</h1>
+  {% if session.role == 'admin' %}<a class="btn primary" href="{{ url_for('doctor_add') }}">+ Add Doctor</a>{% endif %}
+</div>
+<div class="card">
+<table>
+  <tr><th>Name</th><th>Department</th><th>Specialization</th><th>Phone</th><th>Fee</th>{% if session.role == 'admin' %}<th></th>{% endif %}</tr>
+  {% for d in doctors %}
+  <tr><td>{{ d.name }}</td><td>{{ d.department }}</td><td>{{ d.specialization }}</td>
+      <td>{{ d.phone }}</td><td>{{ d.fee|money }}</td>
+      {% if session.role == 'admin' %}<td>
+        <form method="post" action="{{ url_for('doctor_delete', doctor_id=d.id) }}" class="inline"
+              onsubmit="return confirm('Remove this doctor?');"><button class="btn small danger">Remove</button></form></td>{% endif %}
+  </tr>
+  {% endfor %}
+</table>
+</div>
+{% endblock %}

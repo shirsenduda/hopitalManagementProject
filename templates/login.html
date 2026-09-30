@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="login-box card">
+  <h1>+ CityCare Hospital</h1>
+  <p class="muted">Hospital Management System</p>
+  <form method="post">
+    <label>Username</label>
+    <input type="text" name="username" required autofocus>
+    <label>Password</label>
+    <input type="password" name="password" required>
+    <button class="btn primary full" type="submit">Login</button>
+  </form>
+  <div class="demo">
+    <strong>Demo logins</strong><br>
+    admin / admin123<br>reception / reception123<br>doctor / doctor123
+  </div>
+</div>
+{% endblock %}

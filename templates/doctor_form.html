@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Add Doctor{% endblock %}
+{% block content %}
+<h1>Add Doctor</h1>
+<div class="card form-card">
+<form method="post">
+  <label>Full Name</label><input type="text" name="name" value="{{ d.name or '' }}" required>
+  <div class="grid2">
+    <div><label>Department</label>
+      <select name="department_id" required>
+        <option value="">Select</option>
+        {% for dep in depts %}<option value="{{ dep.id }}" {{ 'selected' if d.department_id|string == dep.id|string }}>{{ dep.name }}</option>{% endfor %}
+      </select></div>
+    <div><label>Specialization</label><input type="text" name="specialization" value="{{ d.specialization or '' }}"></div>
+  </div>
+  <div class="grid2">
+    <div><label>Phone</label><input type="text" name="phone" value="{{ d.phone or '' }}"></div>
+    <div><label>Email</label><input type="email" name="email" value="{{ d.email or '' }}"></div>
+  </div>
+  <label>Consultation Fee (₹)</label><input type="number" name="fee" min="0" step="1" value="{{ d.fee or '' }}" required>
+  <hr>
+  <p class="muted">Optional: create a login so this doctor can sign in.</p>
+  <div class="grid2">
+    <div><label>Username</label><input type="text" name="username" value="{{ d.username or '' }}"></div>
+    <div><label>Password (min 6 chars)</label><input type="password" name="password"></div>
+  </div>
+  <button class="btn primary" type="submit">Save Doctor</button>
+  <a class="btn" href="{{ url_for('doctors') }}">Cancel</a>
+</form>
+</div>
+{% endblock %}
